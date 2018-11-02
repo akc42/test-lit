@@ -1,0 +1,7 @@
+{
+  "name": "testlit",
+  "private": true,
+  "dependencies": {
+    "@polymer/lit-element": "^0.6.2"
+  }
+}

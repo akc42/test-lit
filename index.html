@@ -1,0 +1,80 @@
+<html>
+<head>
+  <!-- Polyfills only needed for Firefox and Edge. -->
+  <script src="https://unpkg.com/@webcomponents/webcomponentsjs@next/webcomponents-loader.js"></script>
+
+</head>
+<body>
+
+  <!-- Works only on browsers that support Javascript modules like
+       Chrome, Safari, Firefox 60, Edge 17 -->
+  <script type="module">
+    import {LitElement, html} from '@polymer/lit-element/lit-element.js';
+    import {when} from 'lit-html/directives/when.js';
+
+    class MyElement extends LitElement {
+
+      static get properties() { 
+        return { 
+            active: {type: Boolean},
+            showForm: {type: Boolean}
+        }
+      }
+      constructor() {
+        super()
+        this.active = false;
+        this.showForm = false;
+      }
+
+      render() {
+        return html`
+          <style>
+            :host {
+              display: block;
+            }
+            .textblock {
+              cursor: pointer;
+            }
+          </style>
+          ${this.active?  when(this.showForm,() => html`
+            <div class="testblock" @click=${this._showResults}>Form Showing, click to switch to results</div>
+          ` , () => html`
+            <div class="testblock" @click=${this._close}>Results showing click to close</div>
+          `): ''}
+        `;
+      }
+      open() {
+        this.showForm = true;
+        this.active = true;
+      }
+      _close(e){
+        e.stopPropagation();
+        this.active = false;
+      }
+      _showResults(e){
+        e.stopPropagation();
+        this.showForm = false;
+      }
+
+     
+    }
+
+    customElements.define('my-element', MyElement);
+  </script>
+  
+  <my-element id="myElement"></my-element>
+
+  <div id="controller">This is the controller = click here to start up myElement</div>
+
+  <script>
+    const controller = document.querySelector('#controller');
+    controller.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const myEl = document.querySelector('#myElement');
+      myEl.open();
+    });
+  </script>
+
+  
+</body>
+</html>
